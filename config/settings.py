@@ -49,6 +49,9 @@ INSTALLED_APPS = [
     'allauth.socialaccount.providers.google',
     'allauth.socialaccount.providers.yandex',
 
+    # project apps
+    'groups.apps.GroupsConfig',
+
     # third party apps
     'ckeditor',
     'crispy_forms',
@@ -173,3 +176,8 @@ CRISPY_TEMPLATE_PACK = 'uni_form'
 INTERNAL_IPS = [
     "127.0.0.1",
 ]
+
+
+# email
+
+# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
