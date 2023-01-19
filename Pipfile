@@ -15,6 +15,7 @@ python-dotenv = "*"
 
 [dev-packages]
 django-debug-toolbar = "*"
+flake8 = "*"
 
 [requires]
 python_version = "3.11"
