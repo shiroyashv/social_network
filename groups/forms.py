@@ -1,5 +1,11 @@
 from django import forms
-from .models import Post, Comment
+from .models import Post, Comment, Group
+
+
+class GroupForm(forms.ModelForm):
+    class Meta:
+        model = Group
+        fields = ('name', 'description')
 
 
 class PostForm(forms.ModelForm):
