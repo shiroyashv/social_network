@@ -1,11 +1,18 @@
 from django.db import models
+from django.utils.text import slugify
 from django.contrib.auth.models import User
 
 
 class Group(models.Model):
-    name = models.CharField(max_length=256)
-    description = models.TextField()
+    name = models.CharField(max_length=32)
+    description = models.TextField(max_length=256)
+    created_at = models.DateTimeField(auto_now_add=True)
     members = models.ManyToManyField(User)
+    slug = models.SlugField(max_length=32, unique=True)
+
+    def save(self, *args, **kwargs):
+        self.slug = slugify(self.name)
+        super().save(*args, **kwargs)
 
     def __str__(self):
         return self.name
