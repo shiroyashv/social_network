@@ -47,14 +47,15 @@ class Subscription(models.Model):
     group = models.ForeignKey(Group, on_delete=models.CASCADE)
 
 
-class Like(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    post = models.ForeignKey(Post, on_delete=models.CASCADE)
+class LikeDislike(models.Model):
+    LIKE = 1
+    DISLIKE = -1
+    VOTES = ((LIKE, 'Like'), (DISLIKE, 'Dislike'))
 
-
-class Dislike(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
     post = models.ForeignKey(Post, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    vote = models.SmallIntegerField(choices=VOTES)
+    created_at = models.DateTimeField(auto_now_add=True)
 
 
 # class Friend(models.Model):
