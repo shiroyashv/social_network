@@ -4,7 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import ListView, CreateView, DetailView
 
-from .models import Post, Comment, Group, Subscription
+from .models import LikeDislike, Post, Comment, Group, Subscription
 from .forms import PostForm, CommentForm, GroupForm
 
 
@@ -81,18 +81,40 @@ class GroupDetailView(DetailView):
 
 
 @login_required
-def subscribe_to_group(request, pk):
-    group = get_object_or_404(Group, pk=pk)
+def subscribe_to_group(request, group_id):
+    group = get_object_or_404(Group, pk=group_id)
     subscription = Subscription(subscriber=request.user, group=group)
     subscription.save()
-    return redirect('group_detail', pk=group.pk)
+    return redirect(group)
 
 @login_required
-def unsubscribe_from_group(request, pk):
-    group = get_object_or_404(Group, pk=pk)
+def unsubscribe_from_group(request, group_id):
+    group = get_object_or_404(Group, pk=group_id)
     subscription = get_object_or_404(Subscription, subscriber=request.user, group=group)
     subscription.delete()
-    return redirect('group_detail', pk=group.pk)
+    return redirect(group)
+
+@login_required
+def like_post(request, post_id):
+    post = get_object_or_404(Post, pk=post_id)
+    user = request.user
+    like_dislike = LikeDislike.objects.filter(post=post, user=user)
+    if like_dislike:
+        like_dislike.delete()
+    else:
+        like_dislike = LikeDislike.objects.create(post=post, user=user, vote=LikeDislike.LIKE)
+    return redirect(post)
+
+@login_required
+def dislike_post(request, post_id):
+    post = get_object_or_404(Post, pk=post_id)
+    user = request.user
+    like_dislike = LikeDislike.objects.filter(post=post, user=user)
+    if like_dislike:
+        like_dislike.delete()
+    else:
+        like_dislike = LikeDislike.objects.create(post=post, user=user, vote=LikeDislike.DISLIKE)
+    return redirect(post)
 
 
 # def add_friend(request, pk):
